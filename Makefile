@@ -4,7 +4,7 @@ IDIR:=src
 ODIR:=$(BUILD)/cache
 BIN:=$(BUILD)/bin/$(NAME)
 
-override CXXFLAGS+=-Wall -Wextra -pedantic -ggdb -I$(IDIR) -Ofast
+override CXXFLAGS+=-Wall -Wextra -pedantic -ggdb -I$(IDIR) -Ofast -std=c++23
 override LDFLAGS+=
 
 SRCS:=$(IDIR)/$(NAME).cc                               \

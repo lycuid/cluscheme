@@ -7,33 +7,33 @@
 namespace Tokenizer
 {
 
-class StringParser
-{
+struct StringParser {
     std::string m_buffer;
     size_t m_cursor;
 
-  public:
     StringParser();
     StringParser(std::string);
     ~StringParser() = default;
 
+    void feed(std::string);
+
     const char *remaining() const;
     size_t size() const;
+    bool is_ascii_char(char ch);
 
     const char *peek() const;
     char next();
 
     size_t advance();
     size_t advance(size_t);
+    size_t rollback();
 
     bool consume(char);
     bool consume(const std::string &);
 };
 
 struct Token {
-    enum Ident { Plus, Minus };
-
-    enum Kind : uint {
+    enum class Kind {
         Unknown,
         WhiteSpace,
 
@@ -41,45 +41,64 @@ struct Token {
         RightParen,
         VectorParen,
 
-        // Keyword,    // (Keyword),
-        Identifier, // (Identifier),
-        Boolean,    // (bool),
-        // Number,     // (Number),
-        // Letter,     // (char),
+        // Keyword,
+        Identifier,
+        Boolean,
+        // Number,
+        Letter,
 
-        Space,
-        Newline,
+        Done,
     } kind;
 
     union Value {
-        Ident identifier;
+        int None;
+        enum Identifier : char { Plus = '+', Minus = '-' } ident;
+        enum WhiteSpace : char {
+            Space          = ' ',
+            Tab            = '\t',
+            LineFeed       = '\n',
+            CarriageReturn = '\r',
+        } white_space;
+        char letter;
         bool boolean;
     } value;
 
     void dump() const;
+
+    Token(Token::Kind = Token::Kind::Unknown, Token::Value = {});
+    ~Token() = default;
 };
 
 struct StateMachine {
     enum State {
         Ground,
         Hash,
-        Dispatch,
+        Letter,
+        Number,
     } m_state;
 
   public:
+    StateMachine();
+    ~StateMachine() = default;
     State state() const;
-    void transition(State);
+    void transition(StateMachine::State);
 };
 
 class Lexer
 {
     StateMachine m_fsm;
+    StringParser m_parser;
 
   public:
-    void tokenize(const std::string &);
+    Lexer(const std::string &);
+    Token tokenize();
 
   private:
     StateMachine *fsm();
+    StringParser *parser();
+
+    Token dispatch(Token);
+    void forward(StateMachine::State);
 };
 
 } // namespace Tokenizer
