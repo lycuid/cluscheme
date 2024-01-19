@@ -7,7 +7,20 @@ int main(void)
 {
     using Lexer = Tokenizer::Lexer;
     using Token = Tokenizer::Token;
+    // using Trie = Tokenizer::Trie;
     // using StringParser = Tokenizer::StringParser;
+
+    // Trie trie;
+    // trie.insert("define");
+    // trie.insert("define-var");
+    // trie.insert("lambda");
+    //
+    // std::cout << "[ Checking\t]: 'define-var' -> "
+    //           << (trie.check("define-var") ? "true" : "false") << std::endl;
+    // std::cout << "[ Checking\t]: 'lamdbda' -> "
+    //           << (trie.check("lamdbda") ? "true" : "false") << std::endl;
+    // std::cout << "[ Checking\t]: 'lambda' -> "
+    //           << (trie.check("lambda") ? "true" : "false") << std::endl;
 
     char buffer[256] = {0};
     ssize_t n;
@@ -20,7 +33,7 @@ int main(void)
             for (Token token; token = lexer.tokenize(), 1;) {
                 token.dump();
                 tokens.push_back(token);
-                if (token.kind == Token::Kind::Done)
+                if (token.m_kind == Token::Kind::Done)
                     break;
             }
             std::cout << std::endl;

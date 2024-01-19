@@ -16,11 +16,11 @@ $(BIN): $(OBJS)
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -o $@ $^
 
-$(ODIR)/%.o: $(IDIR)/%.cc $(IDIR)/%.hh
+$(ODIR)/$(NAME).o: $(IDIR)/$(NAME).cc
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -c -o $@ $<
 
-$(ODIR)/%.o: $(IDIR)/%.cc
+$(ODIR)/%.o: $(IDIR)/%.cc $(IDIR)/%.hh
 	@mkdir -p $(@D)
 	$(CXX) $(LDFLAGS) $(CXXFLAGS) -c -o $@ $<
 
