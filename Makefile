@@ -4,11 +4,14 @@ IDIR:=src
 ODIR:=$(BUILD)/cache
 BIN:=$(BUILD)/bin/$(NAME)
 
-override CXXFLAGS+=-Wall -Wextra -pedantic -ggdb -I$(IDIR) -Ofast -std=c++23
+override CXXFLAGS+=-Wall -Wextra -pedantic -ggdb -I$(IDIR) -Ofast -std=c++20
 override LDFLAGS+=
 
-SRCS:=$(IDIR)/$(NAME).cc                               \
-      $(IDIR)/$(NAME)/tokenizer.cc
+SRCS:=$(IDIR)/$(NAME).cc                           \
+      $(IDIR)/$(NAME)/ast.cc                       \
+      $(IDIR)/$(NAME)/lexer.cc                     \
+      $(IDIR)/$(NAME)/lexer/keywords.cc            \
+      $(IDIR)/$(NAME)/lexer/token.cc
 
 OBJS:=$(SRCS:$(IDIR)/%.cc=$(ODIR)/%.o)
 
@@ -29,4 +32,4 @@ run: $(BIN)
 
 .PHONY: clean compile_flags
 clean: ; $(RM) -r $(BUILD)
-compile_flags: ; @echo $(CFLAGS) | tr ' ' '\n' > compile_flags.txt
+compile_flags: ; @echo $(CXXFLAGS) | tr ' ' '\n' > compile_flags.txt

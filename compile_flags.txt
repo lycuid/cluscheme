@@ -1,1 +1,7 @@
-
+-Wall
+-Wextra
+-pedantic
+-ggdb
+-Isrc
+-Ofast
+-std=c++20
